@@ -1,0 +1,28 @@
+/* Footer Custom Styles */
+.footer-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.footer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.footer-card h1, .footer-card h2, .footer-card h3, 
+.footer-card h4, .footer-card h5 {
+    color: white !important;
+    margin-bottom: 1rem;
+}
+
+.footer-card p, .footer-card div {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.footer-card a {
+    color: white !important;
+    text-decoration: none;
+}
+
+.footer-card a:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
