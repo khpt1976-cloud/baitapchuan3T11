@@ -1,0 +1,387 @@
+{% comment %}
+    Content-BlogPost.liquid - Template đặc biệt cho BlogPost Content Type
+    Override template mặc định cho blog posts
+{% endcomment %}
+
+<article class="blog-post">
+    <header class="blog-post-header">
+        {% if Model.ContentItem.DisplayText %}
+            <h1 class="blog-post-title">{{ Model.ContentItem.DisplayText }}</h1>
+        {% endif %}
+        
+        <div class="blog-post-meta">
+            {% if Model.ContentItem.CreatedUtc %}
+                <span class="post-date">
+                    📅 {{ Model.ContentItem.CreatedUtc | date: "%d/%m/%Y" }}
+                </span>
+            {% endif %}
+            
+            {% if Model.ContentItem.Author %}
+                <span class="post-author">
+                    👤 {{ Model.ContentItem.Author }}
+                </span>
+            {% endif %}
+            
+            {% assign tags = Model.ContentItem.BlogPost.Tags.Terms %}
+            {% if tags and tags.size > 0 %}
+                <div class="post-tags">
+                    🏷️ 
+                    {% for tag in tags %}
+                        <span class="tag">{{ tag.DisplayText }}</span>{% unless forloop.last %}, {% endunless %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="blog-post-content">
+        {% if Model.ContentItem.BlogPost.Image.Paths.size > 0 %}
+            <div class="post-image">
+                <img src="{{ Model.ContentItem.BlogPost.Image.Paths[0] }}" 
+                     alt="{{ Model.ContentItem.DisplayText }}" 
+                     class="img-responsive">
+            </div>
+        {% endif %}
+
+        {% if Model.ContentItem.BlogPost.Subtitle.Text %}
+            <div class="post-subtitle">
+                {{ Model.ContentItem.BlogPost.Subtitle.Text }}
+            </div>
+        {% endif %}
+
+        <div class="post-body">
+            {{ Model.ContentItem.BlogPost.Body.Html }}
+        </div>
+    </div>
+
+    <footer class="blog-post-footer">
+        <div class="post-actions">
+            <button class="btn-like" onclick="toggleLike(this)">
+                ❤️ <span class="like-count">0</span>
+            </button>
+            <button class="btn-share" onclick="sharePost()">
+                📤 Chia sẻ
+            </button>
+            <a href="#comments" class="btn-comment">
+                💬 Bình luận
+            </a>
+        </div>
+        
+        {% if Model.ContentItem.BlogPost.Category %}
+            <div class="post-category">
+                📂 Danh mục: <strong>{{ Model.ContentItem.BlogPost.Category.DisplayText }}</strong>
+            </div>
+        {% endif %}
+    </footer>
+</article>
+
+<!-- Related Posts Section -->
+<section class="related-posts">
+    <h3>Bài viết liên quan</h3>
+    <div class="related-posts-grid">
+        <!-- Placeholder for related posts -->
+        <div class="related-post-placeholder">
+            <p>Các bài viết liên quan sẽ được hiển thị ở đây...</p>
+        </div>
+    </div>
+</section>
+
+<!-- Comments Section -->
+<section id="comments" class="comments-section">
+    <h3>Bình luận</h3>
+    <div class="comment-form">
+        <form>
+            <div class="form-group">
+                <label for="comment-name">Tên của bạn:</label>
+                <input type="text" id="comment-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="comment-email">Email:</label>
+                <input type="email" id="comment-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="comment-text">Bình luận:</label>
+                <textarea id="comment-text" name="comment" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Gửi bình luận</button>
+        </form>
+    </div>
+</section>
+
+<style>
+.blog-post {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.blog-post-header {
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #dee2e6;
+}
+
+.blog-post-title {
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    font-size: 2.2em;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.blog-post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #6c757d;
+    font-size: 0.95em;
+}
+
+.blog-post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.post-tags {
+    margin-top: 10px;
+}
+
+.tag {
+    background: #3498db;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-right: 5px;
+}
+
+.blog-post-content {
+    padding: 30px;
+}
+
+.post-image {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.post-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.post-subtitle {
+    font-size: 1.2em;
+    color: #7f8c8d;
+    font-style: italic;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+}
+
+.post-body {
+    line-height: 1.8;
+    font-size: 1.1em;
+    color: #2c3e50;
+}
+
+.post-body p {
+    margin-bottom: 20px;
+}
+
+.post-body h2, .post-body h3 {
+    color: #2c3e50;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.blog-post-footer {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.post-actions button,
+.post-actions a {
+    background: none;
+    border: 1px solid #dee2e6;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.post-actions button:hover,
+.post-actions a:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+    transform: translateY(-1px);
+}
+
+.post-category {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+/* Related Posts */
+.related-posts {
+    margin-top: 40px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.related-posts h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Comments */
+.comments-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.comments-section h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.btn-submit {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blog-post-header {
+        padding: 20px;
+    }
+    
+    .blog-post-title {
+        font-size: 1.8em;
+    }
+    
+    .blog-post-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .blog-post-content {
+        padding: 20px;
+    }
+    
+    .blog-post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .post-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+</style>
+
+<script>
+function toggleLike(button) {
+    const likeCount = button.querySelector('.like-count');
+    const currentCount = parseInt(likeCount.textContent);
+    const isLiked = button.classList.contains('liked');
+    
+    if (isLiked) {
+        button.classList.remove('liked');
+        likeCount.textContent = currentCount - 1;
+        button.style.color = '#6c757d';
+    } else {
+        button.classList.add('liked');
+        likeCount.textContent = currentCount + 1;
+        button.style.color = '#e74c3c';
+    }
+}
+
+function sharePost() {
+    if (navigator.share) {
+        navigator.share({
+            title: document.title,
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link đã được sao chép vào clipboard!');
+        });
+    }
+}
+</script>

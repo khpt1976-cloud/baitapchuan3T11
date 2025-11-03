@@ -1,26 +1,98 @@
 <!DOCTYPE html>
-<html lang="{{ Culture.Name }}">
+<html lang="{{ Culture.Name }}" dir="{{ Culture.Dir }}">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% page_title Site.SiteName, position: "before", separator: " - " %}</title>
     
     {% resources type: "Meta" %}
-
-    <!-- INSERT REQUIRED RESOURCES HERE -->
-    
     {% resources type: "HeadLink" %}
+    
+    <!-- THEME CUSTOM CSS -->
+    {% style src: "~/ThemeFooterDong/css/site.css" %}
+    
     {% resources type: "Stylesheet" %}
     {% resources type: "HeadScript" %}
 </head>
-<body dir="{{ Culture.Dir }}">
+<body class="fade-in-up">
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <div class="site-title">{{ Site.SiteName }}</div>
+            <nav>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="/about">Giới thiệu</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    {% render_body %}
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="content-wrapper">
+            {% render_body %}
+        </div>
+    </main>
     
+    <!-- FOOTER WITH ENHANCED STRUCTURE -->
     <footer>
-    {% render_section "Footer", required: false %}
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Footer Section 1: About -->
+                <div class="footer-section">
+                    <h3>Về chúng tôi</h3>
+                    <p>{{ Site.SiteName }} - Nền tảng CMS mạnh mẽ được xây dựng trên OrchardCore.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                        <a href="#" aria-label="YouTube">📺</a>
+                    </div>
+                </div>
+
+                <!-- Footer Section 2: Quick Links -->
+                <div class="footer-section">
+                    <h3>Liên kết nhanh</h3>
+                    <ul>
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/about">Giới thiệu</a></li>
+                        <li><a href="/contact">Liên hệ</a></li>
+                        <li><a href="/privacy">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Section 3: Contact -->
+                <div class="footer-section">
+                    <h3>Thông tin liên hệ</h3>
+                    <ul>
+                        <li>📧 Email: info@{{ Site.SiteName | downcase }}.com</li>
+                        <li>📞 Điện thoại: (84) 123-456-789</li>
+                        <li>📍 Địa chỉ: Hà Nội, Việt Nam</li>
+                        <li>🕒 Giờ làm việc: 8:00 - 17:00</li>
+                    </ul>
+                </div>
+
+                <!-- Footer Section 4: Dynamic Content -->
+                <div class="footer-section">
+                    {% render_section "Footer", required: false %}
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; {{ "now" | date: "%Y" }} {{ Site.SiteName }}. Tất cả quyền được bảo lưu. | Powered by OrchardCore</p>
+            </div>
+        </div>
     </footer>
     
     {% script name:"jquery", use_cdn:"true", at:"Foot" %}
+    
+    <!-- THEME CUSTOM JS -->
+    {% script src: "~/ThemeFooterDong/js/site.js", at: "Foot" %}
     
     {% resources type: "FootScript" %}
 </body>

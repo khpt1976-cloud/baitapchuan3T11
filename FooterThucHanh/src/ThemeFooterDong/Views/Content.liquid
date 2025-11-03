@@ -1,0 +1,61 @@
+{% comment %}
+    Content.liquid - Template chung cho tất cả Content Items
+    Sử dụng khi không có template cụ thể cho Content Type
+{% endcomment %}
+
+<article class="content-item {{ Model.ContentItem.ContentType | downcase }}-content">
+    {% if Model.Header and Model.Header.size > 0 %}
+        <header class="content-header">
+            {% render_section "Header" %}
+        </header>
+    {% endif %}
+
+    {% if Model.Meta and Model.Meta.size > 0 %}
+        <div class="content-meta">
+            {% render_section "Meta" %}
+        </div>
+    {% endif %}
+
+    <div class="content-body">
+        {% render_section "Content" %}
+    </div>
+
+    {% if Model.Footer and Model.Footer.size > 0 %}
+        <footer class="content-footer">
+            {% render_section "Footer" %}
+        </footer>
+    {% endif %}
+</article>
+
+<style>
+.content-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.content-header {
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.content-meta {
+    padding: 10px 20px;
+    background: #e9ecef;
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.content-body {
+    padding: 20px;
+}
+
+.content-footer {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+</style>
